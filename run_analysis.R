@@ -35,4 +35,5 @@ measurements_filt <- measurements[,feature_labels_filt]
 # Put the table together
 bigtable <- cbind(subjects, Activity, measurements_filt)
 
+# Write out to a file
 write.table(bigtable, file="tidy_data_set")
