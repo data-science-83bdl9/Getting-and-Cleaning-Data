@@ -27,10 +27,12 @@ Activity <- merge(activity_labels, activity_raw, all=TRUE)
 Activity <- Activity[, c("Activity")]
 
 # Filter out non-mean/std measurements
-feature_labels_mean <- feature_labels[grep("-mean\\(",feature_labels,ignore.case=TRUE)]
-feature_labels_std <- feature_labels[grep("-std\\(",feature_labels,ignore.case=TRUE)]
+feature_labels_mean <- as.character(feature_labels[grep("-mean\\(",feature_labels,ignore.case=TRUE)])
+feature_labels_std <- as.character(feature_labels[grep("-std\\(",feature_labels,ignore.case=TRUE)])
 feature_labels_filt <- c(feature_labels_mean, feature_labels_std)
 measurements_filt <- measurements[,feature_labels_filt]
 
 # Put the table together
 bigtable <- cbind(subjects, Activity, measurements_filt)
+
+write.table(bigtable, file="tidy_data_set")
