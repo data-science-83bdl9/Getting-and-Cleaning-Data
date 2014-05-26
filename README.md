@@ -14,7 +14,7 @@ contains the unzipped UCI HAR Dataset
 
 How to run the analysis: source('run_analysis.R')
 
-The result will be a file: tidy_data_set, contains the cleaned data set
+The result will be a file: tidy_data_set
 
 tidy_data_set contains:
 * Subject
