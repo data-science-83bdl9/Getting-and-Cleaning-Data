@@ -1,3 +1,5 @@
+library(reshape2)
+
 # Extract data from files
 subject_training <- read.table("UCI HAR Dataset/train/subject_train.txt", header=FALSE)
 training_x <- read.table("UCI HAR Dataset/train/X_train.txt", header=FALSE)
@@ -11,7 +13,7 @@ activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt", header=FALS
 features <- read.table("UCI HAR Dataset/features.txt", header=FALSE)
 feature_labels <- features[,c("V2")]
 
-# Glue training and test data together
+# 1. Merges the training and the test sets to create one data set
 subjects <- rbind(subject_training, subject_test)
 measurements <- rbind(training_x, test_x)
 activity_raw <- rbind(training_y, test_y)
@@ -22,18 +24,25 @@ colnames(activity_raw) <- c("activity_num")
 colnames(activity_labels) <- c("activity_num", "Activity")
 colnames(measurements) <- feature_labels
 
-# Map activity number to activity name
-Activity <- merge(activity_labels, activity_raw, all=TRUE)
-Activity <- Activity[, c("Activity")]
-
-# Filter out non-mean/std measurements
+# 2. Extracts only the measurements on the mean and standard deviation for each measurement
 feature_labels_mean <- as.character(feature_labels[grep("-mean\\(",feature_labels,ignore.case=TRUE)])
 feature_labels_std <- as.character(feature_labels[grep("-std\\(",feature_labels,ignore.case=TRUE)])
 feature_labels_filt <- c(feature_labels_mean, feature_labels_std)
+
+# 3. Uses descriptive activity names to name the activities in the data set
+Activity <- merge(activity_labels, activity_raw, all=TRUE)
+Activity <- Activity[, c("Activity")]
+
+# 4. Appropriately labels the data set with descriptive activity names. 
 measurements_filt <- measurements[,feature_labels_filt]
 
 # Put the table together
-bigtable <- cbind(subjects, Activity, measurements_filt)
+bigframe <- cbind(subjects, Activity, measurements_filt)
+
+# 5. Creates a second, independent tidy data set with the average of each
+# variable for each activity and each subject.
+bigframe_m <- melt(bigframe, id=c("Subject", "Activity"))
+tidy_data <- dcast(bigframe_m, Subject + Activity ~ variable, fun.aggregate=mean)
 
 # Write out to a file
-write.table(bigtable, file="tidy_data_set")
+write.table(tidy_data, file="tidy_data_set")
