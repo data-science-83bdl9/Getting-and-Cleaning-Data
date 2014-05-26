@@ -22,19 +22,19 @@ activity_raw <- rbind(training_y, test_y)
 colnames(subjects) <- c("Subject")
 colnames(activity_raw) <- c("activity_num")
 colnames(activity_labels) <- c("activity_num", "Activity")
+
+# 4. Appropriately labels the data set with descriptive activity names. 
 colnames(measurements) <- feature_labels
 
 # 2. Extracts only the measurements on the mean and standard deviation for each measurement
 feature_labels_mean <- as.character(feature_labels[grep("-mean\\(",feature_labels,ignore.case=TRUE)])
 feature_labels_std <- as.character(feature_labels[grep("-std\\(",feature_labels,ignore.case=TRUE)])
 feature_labels_filt <- c(feature_labels_mean, feature_labels_std)
+measurements_filt <- measurements[,feature_labels_filt]
 
 # 3. Uses descriptive activity names to name the activities in the data set
 Activity <- merge(activity_labels, activity_raw, all=TRUE)
 Activity <- Activity[, c("Activity")]
-
-# 4. Appropriately labels the data set with descriptive activity names. 
-measurements_filt <- measurements[,feature_labels_filt]
 
 # Put the table together
 bigframe <- cbind(subjects, Activity, measurements_filt)
