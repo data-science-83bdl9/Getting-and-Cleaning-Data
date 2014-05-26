@@ -7,4 +7,16 @@ run_analysis.R
 * Creates a second, independent tidy data set with the average of each
   variable for each activity and each subject.
 
-tidy_data_set contains the cleaned data set
+The original data was downloaded from
+https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
+and unzipped. run_analysis.R should be run in the directory which
+contains the unzipped UCI HAR Dataset
+
+How to run the analysis: source('run_analysis.R')
+
+The result will be a file: tidy_data_set, contains the cleaned data set
+
+tidy_data_set contains:
+* Subject
+* Activity
+* Means for all mean and std type measures for that Subject/Activity pairing
